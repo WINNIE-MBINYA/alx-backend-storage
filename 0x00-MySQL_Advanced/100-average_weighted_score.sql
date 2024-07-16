@@ -1,14 +1,35 @@
 -- Creates a trigger to ensure start_date is always in the present
 
 DELIMITER //
-CREATE TRIGGER check_start_date
-BEFORE INSERT ON projects
-FOR EACH ROW
+
+CREATE PROCEDURE ComputeAverageWeightedScoreForUser (IN user_id INT)
 BEGIN
-    IF NEW.start_date < CURDATE() THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Start date cannot be in the past.';
+    DECLARE total_score FLOAT DEFAULT 0;
+    DECLARE total_weight INT DEFAULT 0;
+    DECLARE weighted_avg FLOAT DEFAULT 0;
+
+    -- Calculate total weighted score
+    SELECT SUM(c.score * p.weight) INTO total_score
+    FROM corrections c
+    JOIN projects p ON c.project_id = p.id
+    WHERE c.user_id = user_id;
+
+    -- Calculate total weight
+    SELECT SUM(weight) INTO total_weight
+    FROM projects;
+
+    -- Calculate weighted average score
+    IF total_weight > 0 THEN
+        SET weighted_avg = total_score / total_weight;
+    ELSE
+        SET weighted_avg = 0;
     END IF;
-END;
-//
+
+    -- Update the average_score for the user
+    UPDATE users
+    SET average_score = weighted_avg
+    WHERE id = user_id;
+
+END //
+
 DELIMITER ;
