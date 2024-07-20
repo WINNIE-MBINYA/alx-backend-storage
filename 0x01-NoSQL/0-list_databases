@@ -1,2 +1,2 @@
-#!/usr/bin/env mongo
+// Script that lists all databases in mongoDB
 show dbs
