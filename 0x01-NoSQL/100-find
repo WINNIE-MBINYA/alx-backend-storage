@@ -1,0 +1,4 @@
+#!/usr/bin/env mongo
+
+db = db.getSiblingDB(_getEnv("MY_DB"))
+db.school.find({ name: { $regex: '^Holberton' } }).pretty()
