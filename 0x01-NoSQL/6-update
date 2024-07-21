@@ -1,2 +1,6 @@
 // Adds a new attribute to a document in the collection school
-db.school.find({name:"Holberton school"}).insertOne({address: "972 Mission street""})
+db = db.getSiblingDB("my_db"); // Connect to the specified database
+db.school.updateMany(
+    { name: "Holberton school" }, // Filter documents with name="Holberton school"
+    { $set: { address: "972 Mission street" } } // Add the address attribute
+);
