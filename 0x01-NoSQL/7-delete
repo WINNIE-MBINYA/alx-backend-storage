@@ -1,2 +1,6 @@
-#!/usr/bin/env mongo
-db.school.deleteMany({name: "Holberton school"})
+// Deletes all documents with name="Holberton school" in the collection school:
+mongo "$1" --quiet --eval '
+db.school.deleteMany(
+    { name: "Holberton school" }
+);
+'
