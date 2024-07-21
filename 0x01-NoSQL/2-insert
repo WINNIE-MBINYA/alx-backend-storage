@@ -1,2 +1,5 @@
 // Script that inserts a document in the collection school
-mongo "$1" --eval 'db.school.insertOne({name: "Holberton school"})'
+mongo "$1" --quiet --eval '
+db.school.insertOne({name: "Holberton school"});
+print("WriteResult({ \"nInserted\" : 1 })")
+'
